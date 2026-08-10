@@ -3,6 +3,7 @@ import useSocket from "../hooks/useSocket";
 import { fetchMessages } from "../services/api";
 import MessageBubble from "./MessageBubble";
 import MessageInput from "./MessageInput";
+import UserSidebar from "./UserSidebar";
 
 export default function ChatWindow({ username, onLogout }) {
   const { socket, connected } = useSocket(username);
@@ -102,7 +103,7 @@ export default function ChatWindow({ username, onLogout }) {
     <div className="chat-screen">
       <header className="chat-header">
         <div>
-          <h2> Realtime Chat Application</h2>
+          <h2>Realtime Chat Application</h2>
           <span className={`connection-dot ${connected ? "online" : "offline"}`}>
             {connected ? "Connected" : "Reconnecting..."}
           </span>
@@ -117,20 +118,26 @@ export default function ChatWindow({ username, onLogout }) {
 
       {loadError && <div className="banner-error">{loadError}</div>}
 
-      <main className="message-list">
-        {messages.map((msg) => (
-          <MessageBubble key={msg._id} message={msg} isOwn={msg.sender === username} />
-        ))}
-        {typingUser && <div className="typing-indicator">{typingUser} is typing...</div>}
-        <div ref={bottomRef} />
-      </main>
+      <div className="chat-body">
+        <UserSidebar currentUsername={username} onlineUsernames={onlineUsers} />
 
-      <MessageInput
-        onSend={handleSend}
-        onTyping={handleTyping}
-        onStopTyping={handleStopTyping}
-        disabled={!connected}
-      />
+        <div className="chat-main">
+          <main className="message-list">
+            {messages.map((msg) => (
+              <MessageBubble key={msg._id} message={msg} isOwn={msg.sender === username} />
+            ))}
+            {typingUser && <div className="typing-indicator">{typingUser} is typing...</div>}
+            <div ref={bottomRef} />
+          </main>
+
+          <MessageInput
+            onSend={handleSend}
+            onTyping={handleTyping}
+            onStopTyping={handleStopTyping}
+            disabled={!connected}
+          />
+        </div>
+      </div>
     </div>
   );
 }

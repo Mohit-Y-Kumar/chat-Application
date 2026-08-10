@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const messageRoutes = require("./routes/messageRoutes");
 const { errorHandler, notFound } = require("./middleware/errorHandler");
 const registerChatSocket = require("./sockets/chatSocket");
+const userRoutes = require("./routes/userRoutes");
 
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
@@ -23,6 +24,7 @@ app.get("/", (req, res) => res.json({ status: "Chat API running" }));
 
 // REST routes
 app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes);  
 
 app.use(notFound);
 app.use(errorHandler);

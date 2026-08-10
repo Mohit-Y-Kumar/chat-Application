@@ -16,5 +16,8 @@ export const postMessage = async (sender, text) => {
   const { data } = await api.post("/messages", { sender, text });
   return data;
 };
-
+export const fetchUsers = async () => {
+  const { data } = await api.get("/users");
+  return data;
+};
 export default api;
